@@ -13,6 +13,50 @@ import AuthModal from "./components/AuthModal";
 // NOTE: If you're using Vite + React + Tailwind, paste this as App.jsx and run `npm run dev`.
 // The gradient uses #1F1C2C → #928DAB based on your request.
 
+// Smooth scroll function with animation
+const smoothScrollTo = (elementId, offset = 80) => {
+  const element = document.getElementById(elementId);
+  if (element) {
+    // Add visual feedback to all buttons
+    const button = document.activeElement;
+    if (button && button.tagName === "BUTTON") {
+      button.style.transform = "scale(0.95)";
+      setTimeout(() => {
+        button.style.transform = "";
+      }, 150);
+    }
+
+    const targetPosition = element.offsetTop - offset;
+    const startPosition = window.pageYOffset;
+    const distance = targetPosition - startPosition;
+    const duration = 800; // 800ms for smooth animation
+    let start = null;
+
+    const animation = (currentTime) => {
+      if (start === null) start = currentTime;
+      const timeElapsed = currentTime - start;
+      const run = easeInOutQuart(
+        timeElapsed,
+        startPosition,
+        distance,
+        duration
+      );
+      window.scrollTo(0, run);
+      if (timeElapsed < duration) requestAnimationFrame(animation);
+    };
+
+    // Easing function for smooth animation
+    const easeInOutQuart = (t, b, c, d) => {
+      t /= d / 2;
+      if (t < 1) return (c / 2) * t * t * t * t + b;
+      t -= 2;
+      return (-c / 2) * (t * t * t * t - 2) + b;
+    };
+
+    requestAnimationFrame(animation);
+  }
+};
+
 export default function App() {
   const [authModal, setAuthModal] = useState({
     isOpen: false,
@@ -73,15 +117,24 @@ function Header({ onOpenAuth }) {
         </a>
 
         <div className="hidden md:flex items-center gap-8 text-sm">
-          <a href="#collections" className="hover:opacity-80">
+          <button
+            onClick={() => smoothScrollTo("collections")}
+            className="hover:opacity-80 transition-all duration-150 active:scale-95"
+          >
             Koleksiyonlar
-          </a>
-          <a href="#notes" className="hover:opacity-80">
+          </button>
+          <button
+            onClick={() => smoothScrollTo("notes")}
+            className="hover:opacity-80 transition-all duration-150 active:scale-95"
+          >
             Notalar
-          </a>
-          <a href="#story" className="hover:opacity-80">
+          </button>
+          <button
+            onClick={() => smoothScrollTo("story")}
+            className="hover:opacity-80 transition-all duration-150 active:scale-95"
+          >
             Hikayemiz
-          </a>
+          </button>
         </div>
 
         <div className="hidden md:flex items-center gap-3">
@@ -106,15 +159,33 @@ function Header({ onOpenAuth }) {
 
       {open && (
         <div className="md:hidden px-4 pb-4 space-y-2 bg-black/40 backdrop-blur">
-          <a href="#collections" className="block py-2">
+          <button
+            onClick={() => {
+              smoothScrollTo("collections");
+              setOpen(false);
+            }}
+            className="block py-2 w-full text-left hover:opacity-80 transition-all duration-150 active:scale-95"
+          >
             Koleksiyonlar
-          </a>
-          <a href="#notes" className="block py-2">
+          </button>
+          <button
+            onClick={() => {
+              smoothScrollTo("notes");
+              setOpen(false);
+            }}
+            className="block py-2 w-full text-left hover:opacity-80 transition-all duration-150 active:scale-95"
+          >
             Notalar
-          </a>
-          <a href="#story" className="block py-2">
+          </button>
+          <button
+            onClick={() => {
+              smoothScrollTo("story");
+              setOpen(false);
+            }}
+            className="block py-2 w-full text-left hover:opacity-80 transition-all duration-150 active:scale-95"
+          >
             Hikayemiz
-          </a>
+          </button>
           <div className="pt-2">
             <button
               onClick={() => onOpenAuth("login")}
@@ -150,18 +221,18 @@ function Hero() {
             hem zarif.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a
-              href="#bestsellers"
-              className="inline-flex items-center gap-2 px-6 py-4 rounded-2xl bg-white text-black hover:bg-white/90 transition-all duration-300 transform hover:scale-105"
+            <button
+              onClick={() => smoothScrollTo("bestsellers")}
+              className="inline-flex items-center gap-2 px-6 py-4 rounded-2xl bg-white text-black hover:bg-white/90 transition-all duration-300 transform hover:scale-105 active:scale-95"
             >
               Şimdi Keşfet <ArrowRight className="w-4 h-4" />
-            </a>
-            <a
-              href="#story"
-              className="inline-flex items-center gap-2 px-6 py-4 rounded-2xl border border-white/30 hover:border-white/60 transition-all duration-300 hover:bg-white/10"
+            </button>
+            <button
+              onClick={() => smoothScrollTo("story")}
+              className="inline-flex items-center gap-2 px-6 py-4 rounded-2xl border border-white/30 hover:border-white/60 transition-all duration-300 hover:bg-white/10 active:scale-95"
             >
               Markayı Tanı
-            </a>
+            </button>
           </div>
 
           <div className="mt-10 flex items-center gap-6 text-sm text-white/80">
@@ -329,9 +400,12 @@ function Bestsellers() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl md:text-3xl font-light">Çok Satanlar</h2>
-          <a href="#" className="text-sm hover:opacity-80">
+          <button
+            onClick={() => smoothScrollTo("collections")}
+            className="text-sm hover:opacity-80 transition-all duration-150 active:scale-95"
+          >
             Tümünü Gör
-          </a>
+          </button>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {items.map((p) => (
