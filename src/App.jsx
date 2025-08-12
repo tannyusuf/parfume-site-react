@@ -87,15 +87,9 @@ function Header({ onOpenAuth }) {
         <div className="hidden md:flex items-center gap-3">
           <button
             onClick={() => onOpenAuth("login")}
-            className="px-4 py-2 rounded-xl border border-white/20 hover:border-white/40 transition"
-          >
-            Giriş
-          </button>
-          <button
-            onClick={() => onOpenAuth("signup")}
             className="px-4 py-2 rounded-xl bg-white text-black hover:bg-white/90 transition"
           >
-            Kayıt Ol
+            Giriş
           </button>
         </div>
 
@@ -121,18 +115,12 @@ function Header({ onOpenAuth }) {
           <a href="#story" className="block py-2">
             Hikayemiz
           </a>
-          <div className="flex gap-2 pt-2">
+          <div className="pt-2">
             <button
               onClick={() => onOpenAuth("login")}
-              className="flex-1 px-4 py-2 rounded-xl border border-white/20 hover:border-white/40 transition text-center"
+              className="w-full px-4 py-2 rounded-xl bg-white text-black hover:bg-white/90 transition text-center"
             >
               Giriş
-            </button>
-            <button
-              onClick={() => onOpenAuth("signup")}
-              className="flex-1 px-4 py-2 rounded-xl bg-white text-black hover:bg-white/90 transition text-center"
-            >
-              Kayıt Ol
             </button>
           </div>
         </div>

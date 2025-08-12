@@ -44,6 +44,8 @@ export default function AuthModal({ isOpen, onClose, initialMode = "login" }) {
   const toggleMode = () => {
     setMode(mode === "login" ? "signup" : "login");
     setFormData({ name: "", email: "", password: "", confirmPassword: "" });
+    setShowPassword(false);
+    setShowConfirmPassword(false);
   };
 
   if (!isOpen) return null;
@@ -89,7 +91,13 @@ export default function AuthModal({ isOpen, onClose, initialMode = "login" }) {
             </button>
 
             {/* Header */}
-            <div className="relative text-center mb-8">
+            <motion.div
+              key={mode}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="relative text-center mb-8"
+            >
               <div className="flex items-center justify-center gap-2 mb-4">
                 <Sparkles className="w-6 h-6 text-white" />
                 <span className="text-xl font-light tracking-widest text-white">
@@ -104,16 +112,24 @@ export default function AuthModal({ isOpen, onClose, initialMode = "login" }) {
                   ? "Hesabınıza giriş yapın"
                   : "Yeni hesap oluşturun"}
               </p>
-            </div>
+            </motion.div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="relative space-y-5">
+            <motion.form
+              key={`form-${mode}`}
+              initial={{ opacity: 0, x: mode === "login" ? -20 : 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              onSubmit={handleSubmit}
+              className="relative space-y-5"
+            >
               {/* Name field - only for signup */}
               {mode === "signup" && (
                 <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
+                  initial={{ opacity: 0, height: 0, y: -10 }}
+                  animate={{ opacity: 1, height: "auto", y: 0 }}
+                  exit={{ opacity: 0, height: 0, y: -10 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
                   className="relative"
                 >
                   <label className="block text-white/80 text-sm mb-2">
@@ -186,9 +202,10 @@ export default function AuthModal({ isOpen, onClose, initialMode = "login" }) {
               {/* Confirm Password field - only for signup */}
               {mode === "signup" && (
                 <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
+                  initial={{ opacity: 0, height: 0, y: -10 }}
+                  animate={{ opacity: 1, height: "auto", y: 0 }}
+                  exit={{ opacity: 0, height: 0, y: -10 }}
+                  transition={{ duration: 0.3, ease: "easeOut", delay: 0.1 }}
                   className="relative"
                 >
                   <label className="block text-white/80 text-sm mb-2">
@@ -242,31 +259,40 @@ export default function AuthModal({ isOpen, onClose, initialMode = "login" }) {
                 {mode === "login" ? "Giriş Yap" : "Kayıt Ol"}
                 <ArrowRight className="w-4 h-4" />
               </button>
-            </form>
+            </motion.form>
 
             {/* Toggle mode */}
-            <div className="relative mt-8 text-center">
+            <motion.div
+              key={`toggle-${mode}`}
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+              className="relative mt-8 text-center"
+            >
               <div className="flex items-center justify-center gap-2 text-sm text-white/70">
                 <span>
                   {mode === "login"
                     ? "Hesabınız yok mu?"
                     : "Zaten hesabınız var mı?"}
                 </span>
-                <button
+                <motion.button
                   onClick={toggleMode}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   className="text-white hover:text-white/80 font-medium underline decoration-white/30 hover:decoration-white/60 transition-colors"
                 >
                   {mode === "login" ? "Kayıt Ol" : "Giriş Yap"}
-                </button>
+                </motion.button>
               </div>
-            </div>
+            </motion.div>
 
             {/* Terms - only for signup */}
             {mode === "signup" && (
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.3, delay: 0.2 }}
                 className="relative mt-6 text-center text-xs text-white/60"
               >
                 Kayıt olarak{" "}
