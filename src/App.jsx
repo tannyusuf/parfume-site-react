@@ -8,11 +8,25 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import AuthModal from "./components/AuthModal";
 
 // NOTE: If you're using Vite + React + Tailwind, paste this as App.jsx and run `npm run dev`.
 // The gradient uses #1F1C2C → #928DAB based on your request.
 
 export default function App() {
+  const [authModal, setAuthModal] = useState({
+    isOpen: false,
+    mode: "login", // "login" or "signup"
+  });
+
+  const openAuthModal = (mode) => {
+    setAuthModal({ isOpen: true, mode });
+  };
+
+  const closeAuthModal = () => {
+    setAuthModal({ isOpen: false, mode: "login" });
+  };
+
   return (
     <div className="min-h-screen w-full text-white bg-[#0f0e13] overflow-x-hidden">
       {/* Global background gradient */}
@@ -25,7 +39,7 @@ export default function App() {
         }}
       />
 
-      <Header />
+      <Header onOpenAuth={openAuthModal} />
       <main className="relative w-full">
         <Hero />
         <Collections />
@@ -35,11 +49,18 @@ export default function App() {
         <Newsletter />
       </main>
       <Footer />
+
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={authModal.isOpen}
+        onClose={closeAuthModal}
+        initialMode={authModal.mode}
+      />
     </div>
   );
 }
 
-function Header() {
+function Header({ onOpenAuth }) {
   const [open, setOpen] = useState(false);
   return (
     <header className="sticky top-0 z-20 backdrop-blur supports-[backdrop-filter]:bg-black/20 bg-black/10">
@@ -64,10 +85,16 @@ function Header() {
         </div>
 
         <div className="hidden md:flex items-center gap-3">
-          <button className="px-4 py-2 rounded-xl border border-white/20 hover:border-white/40 transition">
+          <button
+            onClick={() => onOpenAuth("login")}
+            className="px-4 py-2 rounded-xl border border-white/20 hover:border-white/40 transition"
+          >
             Giriş
           </button>
-          <button className="px-4 py-2 rounded-xl bg-white text-black hover:bg-white/90 transition">
+          <button
+            onClick={() => onOpenAuth("signup")}
+            className="px-4 py-2 rounded-xl bg-white text-black hover:bg-white/90 transition"
+          >
             Kayıt Ol
           </button>
         </div>
@@ -94,6 +121,20 @@ function Header() {
           <a href="#story" className="block py-2">
             Hikayemiz
           </a>
+          <div className="flex gap-2 pt-2">
+            <button
+              onClick={() => onOpenAuth("login")}
+              className="flex-1 px-4 py-2 rounded-xl border border-white/20 hover:border-white/40 transition text-center"
+            >
+              Giriş
+            </button>
+            <button
+              onClick={() => onOpenAuth("signup")}
+              className="flex-1 px-4 py-2 rounded-xl bg-white text-black hover:bg-white/90 transition text-center"
+            >
+              Kayıt Ol
+            </button>
+          </div>
         </div>
       )}
     </header>
